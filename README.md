@@ -10,10 +10,8 @@
 
 ## 프로젝트 수행
   ![image](https://github.com/user-attachments/assets/fa357a36-c20f-4816-aa7b-daa3b8d67345)
-  https://github.com/user-attachments/assets/55ce5314-c8d8-4a88-8c04-6a68db9814de
 
-
-
+  
 ## 목차
 - [시스템 개요](#시스템-개요)
 - [모듈 다이어그램](#모듈-다이어그램)
