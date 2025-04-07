@@ -39,6 +39,28 @@
 
 ---
 
+## 제어 흐름
+```mermaid
+graph TD
+    A[사용자 명령] --> B[ROS 초기화]
+    B --> C[센서 데이터 수집]
+    C --> D[HP.control 호출]
+    D --> E[장애물 확인]
+    E -->|장애물 없음| F[차선 주행]
+    E -->|장애물 있음| G[장애물 회피]
+    F --> H[LaneDetector]
+    H --> I[Stanley]
+    G --> J[시간 기반 시퀀스]
+    I --> K[ackermann_cmd]
+    J --> K
+    K --> L[Obstacle.ino]
+    L --> M[모터 제어]
+    M --> N[uno 피드백]
+    N --> O[사용자 종료]
+    O --> P[시스템 종료]
+```
+---
+
 ## 모듈 다이어그램
 
 ```mermaid
@@ -196,27 +218,6 @@ graph TD
     - 
       ![image](https://github.com/user-attachments/assets/63b09254-897d-4ac6-a66c-a0e312bb6534)
 
-
-## 제어 흐름
-```mermaid
-graph TD
-    A[사용자 명령] --> B[ROS 초기화]
-    B --> C[센서 데이터 수집]
-    C --> D[HP.control 호출]
-    D --> E[장애물 확인]
-    E -->|장애물 없음| F[차선 주행]
-    E -->|장애물 있음| G[장애물 회피]
-    F --> H[LaneDetector]
-    H --> I[Stanley]
-    G --> J[시간 기반 시퀀스]
-    I --> K[ackermann_cmd]
-    J --> K
-    K --> L[Obstacle.ino]
-    L --> M[모터 제어]
-    M --> N[uno 피드백]
-    N --> O[사용자 종료]
-    O --> P[시스템 종료]
-```
   
 # ROS Environment
 - 토픽:
