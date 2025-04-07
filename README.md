@@ -10,7 +10,8 @@
 
 ## 프로젝트 수행
   ![image](https://github.com/user-attachments/assets/fa357a36-c20f-4816-aa7b-daa3b8d67345)
-
+  https://www.youtube.com/watch?v=FwGlec1eLXw&t=5435s
+  https://www.youtube.com/watch?v=FwGlec1eLXw&t=6775
   
 ## 목차
 - [시스템 개요](#시스템-개요)
