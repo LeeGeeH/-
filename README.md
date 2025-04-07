@@ -1,62 +1,35 @@
 # 자율 주행 시스템 프로젝트
 
-이 프로젝트는 ROS(로봇 운영 체제)를 기반으로 한 자율 주행 시스템으로, 카메라와 LiDAR 데이터를 활용하여 차선 감지, 정지선 감지, 장애물 회피 기능을 구현합니다. 자율 주행 차량의 핵심 기능을 통합적으로 테스트하고 개발할 수 있는 플랫폼을 제공합니다.
+이 프로젝트는 ROS(로봇 운영 체제)를 기반으로 한 자율 주행 시스템으로, 카메라와 LiDAR 데이터를 활용하여 차선 감지, 정지선 감지, 장애물 회피 기능을 구현합니다. 아두이노를 통해 하드웨어 제어를 통합하며, 다양한 모듈이 협력하여 차량을 제어합니다.
 
 ---
 
 ## 목차
+- [시스템 개요](#시스템-개요)
+- [모듈 다이어그램](#모듈-다이어그램)
+- [모듈 설명](#모듈-설명)
+  - [Obstacle Package](#obstacle-package)
+  - [Lane Detection](#lane-detection)
+  - [Obstacle Avoidance](#obstacle-avoidance)
+  - [Horse Power Control](#horse-power-control)
+  - [ROS Environment](#ros-environment)
+---
 
-- [주요 기능](#주요-기능)
-- [프로젝트 구조](#프로젝트-구조)
-- [ROS란 무엇인가](#ros란-무엇인가)
-- [ROS 사용 이유](#ros-사용-이유)
-- [프로젝트 장단점](#프로젝트-장단점)
+## 시스템 개요
+- **목표**: 카메라로 차선과 정지선을 감지하고, LiDAR로 장애물을 탐지하여 차량을 안전하게 주행시키는 시스템.
+- **구성 요소**:
+  - **카메라**: 차선 및 정지선 감지.
+  - **LiDAR**: 장애물 감지 및 회피.
+  - **아두이노**: 모터 제어 및 피드백.
+  - **ROS**: 모듈 간 통신 및 데이터 처리.
+- **주요 기능**:
+  - 차선 추적 (Stanley 제어).
+  - 정지선 감지 및 정차.
+  - 장애물 회피 (FSM 기반 상태 전이).
 
 ---
 
-## 주요 기능
-
-- **차선 감지**: 카메라 영상에서 차선을 추적하여 주행 경로를 생성.
-- **정지선 감지**: 카메라 영상을 통해 정지선을 인식하고 주행 제어에 반영.
-- **장애물 회피**: LiDAR 데이터를 분석하여 장애물을 감지하고 회피 조향각을 계산.
-- **차량 제어**: 속도와 조향각을 조절하여 자율 주행 수행.
-
----
-
-## 프로젝트 구조
-
-## ROS란 무엇인가
-
-ROS(Robot Operating System)는 로봇 소프트웨어 개발을 위한 오픈소스 프레임워크입니다. 하드웨어 추상화, 드라이버, 메시지 통신, 패키지 관리 등 로봇 애플리케이션 개발에 필요한 도구와 라이브러리를 제공합니다. ROS는 분산 시스템으로 동작하며, 노드(Node) 간 토픽(Topic)을 통해 데이터를 주고받습니다.
-
-주요 특징:
-- 모듈화: 독립적인 노드로 기능을 분리 가능.
-- 통신: 퍼블리시/구독 모델로 데이터 교환.
-- 확장성: 다양한 센서와 플랫폼 지원.
-
-## ROS 사용 이유
-
-이 프로젝트에서 ROS를 사용한 이유는 다음과 같습니다:
-
-- 모듈화와 재사용성: 각 기능(차선 감지, 장애물 회피 등)을 독립적인 노드로 개발하여 유지보수와 확장이 용이합니다.
-- 센서 통합: 카메라, LiDAR, Arduino 등 다양한 하드웨어를 토픽으로 쉽게 연결 가능.
-- 시뮬레이션 지원: CARLA, Gazebo와 같은 시뮬레이터와의 호환성으로 테스트가 간편.
-- 커뮤니티와 생태계: ROS의 풍부한 라이브러리와 커뮤니티 지원으로 개발 속도 향상.
-
-## 프로젝트 장단점
-장점
-- 모듈화 구조: 각 모듈이 독립적이어서 기능 추가 및 수정이 용이.
-- ROS 기반: 다양한 하드웨어와 소프트웨어 통합이 쉬움.
-- 확장 가능성: 시뮬레이터 및 추가 센서와의 연동 가능.
-- 실시간 처리: 카메라와 LiDAR 데이터를 실시간으로 처리하여 자율 주행 구현.
-
-단점
-- 복잡성: ROS 초보자에게는 학습 곡선이 존재.
-- 의존성: ROS와 특정 라이브러리에 의존하므로 환경 설정이 복잡할 수 있음.
-- 미완성 부분: Stopline.py에서 StoplineDetector 호출이 비활성화된 상태로, 통합이 완전히 이루어지지 않음.
-- 문서화 부족: 일부 토픽(예: 카메라 토픽) 명확히 정의되지 않음.
-
-### 모듈 연결 다이어그램
+## 모듈 다이어그램
 
 ```mermaid
 graph TD
@@ -133,6 +106,70 @@ graph TD
     HPSensor -->|uses| NP
     Stanley -->|uses| MATH
     Stanley -->|uses| NP
-    Clustering -->|uses| SKLearn
+
 ```
 
+## 모듈 설명
+# Obstacle Package
+- Stopline.py:
+    - 역할: 메인 노드로 시스템 실행을 담당.
+    - 기능: HP를 호출하여 차량 제어 루프 실행, 아두이노 코드 업로드 기능 포함 (현재 주석 처리).
+    - 의존성: horse_power.py, stopline_detector.py, camera.py, cv2, numpy.
+  
+- stopline_detector.py - StoplineDetector:
+    - 역할: 카메라 이미지에서 정지선 감지.
+    - 기능: 윤곽선 분석으로 정지선 탐지, 감지 여부 반환.
+    - 의존성: camera.py, cv2, numpy.
+  
+- Obstacle.ino:
+    - 역할: ROS 메시지를 받아 모터 제어 및 가변저항 값 피드백.
+    - 기능: /ackermann_cmd 구독으로 속도/조향각 적용, /uno로 가변저항 값 퍼블리시.
+    - 의존성: Car_Library.h.
+  
+# Lane Detection
+- LaneDetector:
+    - 역할: 카메라 이미지에서 차선 감지 및 조향각 계산.
+    - 기능: Bird's Eye View 변환 후 차선 곡률 계산.
+    - 의존성: camera.py, cv2, numpy.
+  
+# Obstacle Avoidance
+- Clustering:
+    - 역할: LiDAR 데이터로 장애물 클러스터링 및 회피 조향각 계산.
+    - 기능: DBSCAN으로 장애물 군집화, FSM으로 회피 방향 결정.
+    - 의존성: FSM.py, numpy, sklearn.cluster.DBSCAN.
+    - ROS: /ackermann_cmd 퍼블리시.
+  
+- FSM.py - FiniteStateMachine:
+    - 역할: 장애물 감지 횟수 기반 상태 전이.
+    - 기능: FollowLane, AvoidLeft, AvoidRight 상태 관리.
+    - 의존성: time.
+  
+# Horse Power Control
+- horse_power.py - HP:
+    - 역할: 차량 제어 통합 (차선 주행 + 장애물 회피).
+    - 기능:LaneDetector로 차선 추적.
+        - Clustering으로 장애물 회피.
+        - Stanley로 조향각 보정.
+        - 시간 기반 회피 시퀀스 실행.
+    - 의존성: LaneDetector, Clustering, horse_power_sensor.py, controller.py, cv2, time.
+    - ROS: /ackermann_cmd 퍼블리시.
+  
+- horse_power_sensor.py - HPSensor:
+    - 역할: 센서 데이터 수집 (카메라, LiDAR, 초음파).
+    - 기능: ROS 토픽 구독으로 데이터 저장 (real_cam, cam, lidar_filtered, ultra).
+    - 의존성: cv_bridge, numpy.
+    - ROS: /camera0/usb_cam/image_raw, /scan_filtered, /ultrasonic 구독.
+      
+- controller.py - Stanley:
+    - 역할: Stanley 제어 알고리즘으로 조향각 계산.
+    - 기능: 횡방향 오차와 곡률 기반 조향각 반환 (PID는 미사용).
+    - 의존성: math, numpy.
+  
+# ROS Environment
+- 토픽:
+    - /ackermann_cmd: HP와 Clustering에서 퍼블리시, Obstacle.ino에서 구독.
+    - /uno: Obstacle.ino에서 퍼블리시.
+    - /camera0/usb_cam/image_raw: HPSensor에서 카메라 이미지 수신.
+    - /scan_filtered: HPSensor에서 LiDAR 데이터 수신.
+    - /ultrasonic: HPSensor에서 초음파 데이터 수신.
+- 런치 파일: Stopline.py 실행 및 카메라 설정(lo_camera.launch).
