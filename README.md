@@ -61,11 +61,11 @@ ROS(Robot Operating System)는 로봇 소프트웨어 개발을 위한 오픈소
 ```mermaid
 graph TD
     subgraph "Obstacle Package"
-        Stopline[Stopline.py] -->|imports| StoplineDetector[StoplineDetector]
-        Stopline -->|imports| HP[HP]
-        Stopline -->|imports| Camera[Camera]
+        Stopline[Stopline.py] -->|imports| StoplineDetector[stopline_detector.py]
+        Stopline -->|imports| HP[horse_power.py - HP]
+        Stopline -->|imports| Camera[camera.py - Camera]
         StoplineDetector -->|processes| Camera
-        ObstacleINO[Obstacle.ino] -->|controls| HP[HP]
+        ObstacleINO[Obstacle.ino] -->|controls via /ackermann_cmd| HP
     end
 
     subgraph "Lane Detection"
@@ -73,17 +73,29 @@ graph TD
     end
 
     subgraph "Obstacle Avoidance"
-        Clustering[Clustering] -->|uses| FSM[FiniteStateMachine]
+        Clustering[Clustering] -->|uses| FSM[FSM.py - FiniteStateMachine]
+    end
+
+    subgraph "Horse Power Control"
+        HP -->|uses| LaneDetector
+        HP -->|uses| Clustering
+        HP -->|uses| HPSensor[horse_power_sensor.py - HPSensor]
+        HP -->|uses| Stanley[controller.py - Stanley]
     end
 
     subgraph "ROS Environment"
         Launch[Launch File] -->|launches| Stopline
         Launch -->|includes| LoCamera[lo_camera.launch]
         Stopline -->|initializes| ROSPY[rospy]
+        HP -->|initializes| ROSPY
         Clustering -->|initializes| ROSPY
-        Clustering -->|publishes /ackermann_cmd| Ackermann[AckermannDriveStamped]
+        HP -->|publishes /ackermann_cmd| Ackermann[AckermannDriveStamped]
+        Clustering -->|publishes /ackermann_cmd| Ackermann
         ObstacleINO -->|subscribes /ackermann_cmd| Ackermann
         ObstacleINO -->|publishes /uno| ROSPY
+        HPSensor -->|subscribes /camera0/usb_cam/image_raw| Image[sensor_msgs.msg.Image]
+        HPSensor -->|subscribes /scan_filtered| LaserScan[sensor_msgs.msg.LaserScan]
+        HPSensor -->|subscribes /ultrasonic| Int32MultiArray[std_msgs.msg.Int32MultiArray]
     end
 
     subgraph "External Modules"
@@ -92,6 +104,16 @@ graph TD
         CV2[cv2]
         NP[numpy]
         SKLearn[sklearn.cluster.DBSCAN]
+        TIME[time]
+        MATH[math]
+        CVBridge[cv_bridge.CvBridge]
+        Image[sensor_msgs.msg.Image]
+        LaserScan[sensor_msgs.msg.LaserScan]
+        Int32MultiArray[std_msgs.msg.Int32MultiArray]
+    end
+
+    subgraph "Arduino Environment"
+        ObstacleINO -->|uses| CarLibrary[Car_Library.h]
     end
 
     Stopline -->|uses| CV2
@@ -101,6 +123,16 @@ graph TD
     LaneDetector -->|uses| CV2
     LaneDetector -->|uses| NP
     Clustering -->|uses| NP
+    Clustering -->|uses| SKLearn
+    HP -->|uses| CV2
+    HP -->|uses| TIME
+    Camera -->|uses| CV2
+    Camera -->|uses| NP
+    FSM -->|uses| TIME
+    HPSensor -->|uses| CVBridge
+    HPSensor -->|uses| NP
+    Stanley -->|uses| MATH
+    Stanley -->|uses| NP
     Clustering -->|uses| SKLearn
 ```
 
