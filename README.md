@@ -40,25 +40,27 @@
 
 ---
 
-## 제어 흐름
+## 제어 흐름 다이어그램
+
 ```mermaid
 graph TD
-    A[사용자 명령] --> B[ROS 초기화]
-    B --> C[센서 데이터 수집]
-    C --> D[HP.control 호출]
-    D --> E[장애물 확인]
-    E -->|장애물 없음| F[차선 주행]
-    E -->|장애물 있음| G[장애물 회피]
-    F --> H[LaneDetector]
-    H --> I[Stanley]
-    G --> J[시간 기반 시퀀스]
-    I --> K[ackermann_cmd]
+    A[사용자 명령<br>main.py] --> B[ROS 초기화<br>main.py: rospy]
+    B --> C[센서 데이터 수집<br>horse_power_sensor.py: HPSensor]
+    C --> D[HP.control 호출<br>main.py-> horse_power.py: HP]
+    D --> E[장애물 확인<br>horse_power.py: HP, Clustering]
+    E -->|장애물 없음| F[차선 주행<br>horse_power.py: HP]
+    E -->|장애물 있음| G[장애물 회피<br>horse_power.py: HP, FSM.py: FiniteStateMachine]
+    F --> H[LaneDetector<br>LaneDetector, camera.py: Camera]
+    H --> I[Stanley<br>controller.py: Stanley]
+    G --> J[시간 기반 시퀀스<br>horse_power.py: HP]
+    I --> K[ackermann_cmd<br>horse_power.py: HP]
     J --> K
     K --> L[Obstacle.ino]
-    L --> M[모터 제어]
-    M --> N[uno 피드백]
-    N --> O[사용자 종료]
-    O --> P[시스템 종료]
+    L --> M[모터 제어<br>Obstacle.ino]
+    M --> N[uno 피드백<br>Obstacle.ino]
+    N --> O[사용자 종료<br>main.py]
+    O --> P[시스템 종료<br>main.py: cv2]
+
 ```
 ---
 
