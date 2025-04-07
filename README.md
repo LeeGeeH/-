@@ -115,22 +115,33 @@ graph TD
     - 역할: 메인 노드로 시스템 실행을 담당.
     - 기능: HP를 호출하여 차량 제어 루프 실행, 아두이노 코드 업로드 기능 포함 (현재 주석 처리).
     - 의존성: horse_power.py, stopline_detector.py, camera.py, cv2, numpy.
+    - 
+      ![image](https://github.com/user-attachments/assets/d0fd08d1-7969-4363-8656-de8b771cfc69)
+
   
 - stopline_detector.py - StoplineDetector:
     - 역할: 카메라 이미지에서 정지선 감지.
     - 기능: 윤곽선 분석으로 정지선 탐지, 감지 여부 반환.
     - 의존성: camera.py, cv2, numpy.
+    -
+    - ![image](https://github.com/user-attachments/assets/915c7112-c4fe-4dff-96ab-511b47f08ff8)
+
   
 - Obstacle.ino:
     - 역할: ROS 메시지를 받아 모터 제어 및 가변저항 값 피드백.
     - 기능: /ackermann_cmd 구독으로 속도/조향각 적용, /uno로 가변저항 값 퍼블리시.
     - 의존성: Car_Library.h.
-  
+    - 
+      ![image](https://github.com/user-attachments/assets/02c2830b-9a58-4909-b1a1-1ddc2d898842)
+
 # Lane Detection
 - LaneDetector:
     - 역할: 카메라 이미지에서 차선 감지 및 조향각 계산.
     - 기능: Bird's Eye View 변환 후 차선 곡률 계산.
     - 의존성: camera.py, cv2, numpy.
+    - 
+      ![image](https://github.com/user-attachments/assets/df6d46ad-8544-4d45-b90d-7269a380f066)
+
   
 # Obstacle Avoidance
 - Clustering:
@@ -138,11 +149,15 @@ graph TD
     - 기능: DBSCAN으로 장애물 군집화, FSM으로 회피 방향 결정.
     - 의존성: FSM.py, numpy, sklearn.cluster.DBSCAN.
     - ROS: /ackermann_cmd 퍼블리시.
-  
+    - 
+      ![image](https://github.com/user-attachments/assets/099b20dd-731b-4250-bd8b-1fa465a27af4)
+
 - FSM.py - FiniteStateMachine:
     - 역할: 장애물 감지 횟수 기반 상태 전이.
     - 기능: FollowLane, AvoidLeft, AvoidRight 상태 관리.
     - 의존성: time.
+    - 
+      ![image](https://github.com/user-attachments/assets/a0a50773-7c22-4f3f-87cd-b1630e56c633)
   
 # Horse Power Control
 - horse_power.py - HP:
@@ -153,17 +168,24 @@ graph TD
         - 시간 기반 회피 시퀀스 실행.
     - 의존성: LaneDetector, Clustering, horse_power_sensor.py, controller.py, cv2, time.
     - ROS: /ackermann_cmd 퍼블리시.
+    - 
+      ![image](https://github.com/user-attachments/assets/111a0472-1cc4-4e4f-b24a-5fef98f64228)
   
 - horse_power_sensor.py - HPSensor:
     - 역할: 센서 데이터 수집 (카메라, LiDAR, 초음파).
     - 기능: ROS 토픽 구독으로 데이터 저장 (real_cam, cam, lidar_filtered, ultra).
     - 의존성: cv_bridge, numpy.
     - ROS: /camera0/usb_cam/image_raw, /scan_filtered, /ultrasonic 구독.
-      
+    - 
+      ![image](https://github.com/user-attachments/assets/5a29f868-918c-433a-b42d-2cba861d0c14)
+
 - controller.py - Stanley:
     - 역할: Stanley 제어 알고리즘으로 조향각 계산.
     - 기능: 횡방향 오차와 곡률 기반 조향각 반환 (PID는 미사용).
     - 의존성: math, numpy.
+    - 
+      ![image](https://github.com/user-attachments/assets/63b09254-897d-4ac6-a66c-a0e312bb6534)
+
   
 # ROS Environment
 - 토픽:
