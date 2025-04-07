@@ -4,6 +4,10 @@
 
 ---
 
+## 프로젝트 일정
+  ![image](https://github.com/user-attachments/assets/1991e81d-a522-46cd-b903-6b0ae9e89cfa)
+
+
 ## 목차
 - [시스템 개요](#시스템-개요)
 - [모듈 다이어그램](#모듈-다이어그램)
