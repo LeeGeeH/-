@@ -10,6 +10,7 @@ from horse_power_sensor import HPSensor  # 센서 관련 사용자 정의 클래
 from controller import Stanley  # Stanley 제어 알고리즘
 from lane_detector import LaneDetector  # 차선 인식 클래스
 from obstacle_detector import Clustering  # 장애물 인식 및 군집화 클래스
+from fsm import FiniteStateMachine # 상태전이 클래스
 
 class HP:
     def __init__(self):
