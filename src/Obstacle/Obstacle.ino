@@ -5,7 +5,6 @@
 
 #include <ros.h>  // ROS 통신 라이브러리
 #include <ackermann_msgs/AckermannDriveStamped.h>  // Ackermann 메시지 타입
-#include <PID_v1.h>  // PID 제어 라이브러리 (사용되지 않음)
 #include <Car_Library.h>  // 모터 제어 함수 라이브러리
 #include <avr/io.h>  // AVR 입출력 레지스터 조작
 #include <avr/interrupt.h>  // 인터럽트 처리
@@ -53,7 +52,6 @@ const int MAX_LANE_ANGLE = 20;   // 최대 조향각
 // 제어 관련 변수
 int REV = 0;  // 목표 가변저항 값 (Set Point)
 double steering_output = 0.0;  // 조향 출력값
-double error = 0.0;  // 오차 값
 const double kp = 0.1;  // 비례 제어 상수 (P 제어)
 
 // 모터 핀 설정
@@ -62,36 +60,11 @@ int motorF2 = 4;  // 조향 모터 핀 2
 int motorB1 = 6;  // 구동 모터 핀 1 (왼쪽)
 int motorB2 = 7;  // 구동 모터 핀 2 (왼쪽)
 
-// 목표 가변저항 값 계산 함수
-int calculate_target_resistance(float lane_angle) {
-  // 조향각을 가변저항 범위로 매핑 (-20~20 -> 50~207)
-  int target_resistance = map(round(lane_angle), MIN_LANE_ANGLE, MAX_LANE_ANGLE, R_min, R_max);
-  return target_resistance;
-}
-
 // 조향 제어 함수 (P 제어)
 double control_steering_based_on_lane_angle(int target_resistance, int current_resistance) {
-  // 오차 계산: 목표값 - 현재값
-  error = (target_resistance - current_resistance);
-  // 비례 제어: 출력 = kp * 오차
-  double steering_output = kp * error;
+  double error = (target_resistance - current_resistance);  // 오차 계산: 목표값 - 현재값
+  double steering_output = kp * error;  // 비례 제어: 출력 = kp * 오차
   return steering_output;
-}
-
-// 조향 모터 설정 함수
-void set_steering(float steering_output) {
-  float out = steering_output;
-  float weight_multiplier = 5.0;  // 출력 증폭 상수
-
-  if (out > 0) {  // 양수: 좌회전
-    if (out < 25) out = 25;  // 최소 출력 보장
-    motor_backward(motorF1, motorF2, out * weight_multiplier);
-  } else if (out < 0) {  // 음수: 우회전
-    if (out > -25) out = -25;  // 최소 출력 보장
-    motor_forward(motorF1, motorF2, abs(out) * weight_multiplier);
-  } else {  // 0: 정지 및 잠금
-    motor_hold(motorF1, motorF2);
-  }
 }
 
 /*--------------------------------------------------
@@ -138,7 +111,6 @@ ISR(TIMER2_COMPA_vect) {
 /*--------------------------------------------------
                       LOOP
 ---------------------------------------------------*/
-double out = 0.0;  // 조향 출력값 저장
 void loop() {
   nh.spinOnce();  // ROS 메시지 처리
 
@@ -152,20 +124,19 @@ void loop() {
     REV = map(sub_angle, 0, 20, R_mid, R_max);
   } else if (sub_angle == 0) {  // 직진
     REV = R_mid;
-  } else if (sub_angle < 0) {  // 좌회전
+  } else {  // 좌회전
     REV = map(sub_angle, -20, 0, R_min, R_mid);
   }
 
   // 조향 출력 계산 및 모터 제어
   steering_output = control_steering_based_on_lane_angle(REV, R_now);
-  out = steering_output;
   float weight_multiple = 3.5;  // 출력 증폭 상수
-  if (out > 0) {  // 양수: 좌회전
-    if (out < 25) out = 25;
-    motor_backward(motorF1, motorF2, out * weight_multiple);
-  } else if (out < 0) {  // 음수: 우회전
-    if (out > -25) out = -25;
-    motor_forward(motorF1, motorF2, abs(out) * weight_multiple);
+  if (steering_output > 0) {  // 양수: 좌회전
+    if (steering_output < 25) steering_output = 25;
+    motor_backward(motorF1, motorF2, steering_output * weight_multiple);
+  } else if (steering_output < 0) {  // 음수: 우회전
+    if (steering_output > -25) steering_output = -25;
+    motor_forward(motorF1, motorF2, abs(steering_output) * weight_multiple);
   } else {  // 0: 정지
     motor_hold(motorF1, motorF2);
   }
@@ -174,32 +145,6 @@ void loop() {
 /*--------------------------------------------------
                       FUNCTION
 ---------------------------------------------------*/
-
-// PWM 출력 함수 (사용되지 않음, set_steering과 유사)
-void pwmOut(double out) {
-  float weight_multiplier = 2.5;
-  if (out > 0) {
-    if (out < 25) out = 25;
-    motor_backward(motorF1, motorF2, out * weight_multiplier);
-  } else if (out < 0) {
-    if (out > -25) out = -25;
-    motor_forward(motorF1, motorF2, abs(out) * weight_multiplier);
-  } else {
-    motor_hold(motorF1, motorF2);
-  }
-}
-
-// 구동 모터 제어 함수 (단순 속도 제어, 사용되지 않음)
-void motor_control(int speed) {
-  speed = speed * 3.0;
-  if (speed > 0) {
-    motor_forward(motorB1, motorB2, speed);
-  } else if (speed < 0) {
-    motor_backward(motorB1, motorB2, abs(speed));
-  } else {
-    motor_hold(motorB1, motorB2);
-  }
-}
 
 // 구동 모터 제어 함수 (조향각과 속도 기반)
 void motor_control_new(float lane_angle, int motor_speed) {
@@ -218,10 +163,8 @@ void motor_control_new(float lane_angle, int motor_speed) {
     } else {
       motor_forward(motorB1, motorB2, speed);
     }
-  } else if (motor_speed < 0) {  // 후진
+  } else {  // 후진
     motor_backward(motorB1, motorB2, (abs(speed)) * 1.5);
-  } else {
-    motor_hold(motorB1, motorB2);
   }
 }
 
