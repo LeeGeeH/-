@@ -4,7 +4,7 @@ import math
 class Stanley:
     
     # 조향 각도를 계산하는 함수
-    def control(self, middle_point, centerx, u, curvature_angle):
+    def control(self, curvature_angle):
         psi = curvature_angle  # 차선 곡률로부터 추정한 조향각
 
         # 조향 각도 제한 (최대 ±20도)
