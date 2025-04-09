@@ -167,7 +167,7 @@ graph TD
 
   
 # Obstacle Avoidance
-- Clustering:
+- Obstacle_detector.py - Clustering:
     - 역할: LiDAR 데이터로 장애물 클러스터링 및 회피 조향각 계산
     - 기능: DBSCAN으로 장애물 군집화, FSM으로 회피 방향 결정
     - 의존성: FSM.py, numpy, sklearn.cluster.DBSCAN
