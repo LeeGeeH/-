@@ -140,8 +140,7 @@ class HP:
                 self.obstacle_detector.fsm.transition(False)  # FSM 상태 초기화
 
                 curvature_angle = self.lane_detector.process(self.sensor.cam)  # 차선 곡률 계산
-                steering_angle = self.stanley.control(
-                    self.lane_detector.avg_middle, 320, 1, curvature_angle)  # Stanley 제어기 호출
+                steering_angle = self.stanley.control(curvature_angle)  # Stanley 제어기 호출
 
                 self.motor_msg.drive.speed = int(self.speed)  # 기본 속도 유지
                 self.motor_msg.drive.steering_angle = int(steering_angle)  # 조향각 설정
