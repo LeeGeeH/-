@@ -207,26 +207,25 @@ graph TD
       ![image](https://github.com/user-attachments/assets/111a0472-1cc4-4e4f-b24a-5fef98f64228)
   
 - horse_power_sensor.py - HPSensor:
-    - 역할: 센서 데이터 수집 (카메라, LiDAR, 초음파).
-    - 기능: ROS 토픽 구독으로 데이터 저장 (real_cam, cam, lidar_filtered, ultra).
-    - 의존성: cv_bridge, numpy.
-    - ROS: /camera0/usb_cam/image_raw, /scan_filtered, /ultrasonic 구독.
+    - 역할: 센서 데이터 수집 (카메라, LiDAR, 초음파)
+    - 기능: ROS 토픽 구독으로 데이터 저장 (real_cam, cam, lidar_filtered, ultra)
+    - 의존성: cv_bridge, numpy
+    - ROS: /camera0/usb_cam/image_raw, /scan_filtered, /ultrasonic 구독
     - 
       ![image](https://github.com/user-attachments/assets/5a29f868-918c-433a-b42d-2cba861d0c14)
 
 - controller.py - Stanley:
-    - 역할: Stanley 제어 알고리즘으로 조향각 계산.
-    - 기능: 횡방향 오차와 곡률 기반 조향각 반환 (PID는 미사용).
-    - 의존성: math, numpy.
+    - 역할: Stanley 제어 알고리즘으로 조향각 계산
+    - 기능: 곡률 기반 조향각 반환
+    - 의존성: math, numpy
     - 
       ![image](https://github.com/user-attachments/assets/63b09254-897d-4ac6-a66c-a0e312bb6534)
 
   
 # ROS Environment
 - 토픽:
-    - /ackermann_cmd: HP와 Clustering에서 퍼블리시, Obstacle.ino에서 구독.
-    - /uno: Obstacle.ino에서 퍼블리시.
-    - /camera0/usb_cam/image_raw: HPSensor에서 카메라 이미지 수신.
-    - /scan_filtered: HPSensor에서 LiDAR 데이터 수신.
-    - /ultrasonic: HPSensor에서 초음파 데이터 수신.
-- 런치 파일: Stopline.py 실행 및 카메라 설정(lo_camera.launch).
+    - /ackermann_cmd: HP와 Clustering에서 퍼블리시, Obstacle.ino에서 구독
+    - /camera0/usb_cam/image_raw: HPSensor에서 카메라 이미지 수신
+    - /scan_filtered: HPSensor에서 LiDAR 데이터 수신
+    - /ultrasonic: HPSensor에서 초음파 데이터 수신
+- 런치 파일: Stopline.py 실행 및 카메라 설정(lo_camera.launch)
