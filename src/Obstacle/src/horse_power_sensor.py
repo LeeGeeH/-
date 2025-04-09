@@ -35,8 +35,6 @@ class HPSensor:
     # 필터링된 라이다 콜백 함수
     def callback_lidar_filtered(self, msg):
         self.lidar_filtered = msg
-        # 예전 코드에서 라이다 길이를 출력하려고 했던 흔적 주석
-        # print('rm', len(LaserScan.ranges))
 
     # 센서가 모두 초기화될 때까지 기다리는 함수
     def init(self, rate):
