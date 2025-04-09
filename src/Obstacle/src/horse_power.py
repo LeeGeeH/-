@@ -61,8 +61,7 @@ class HP:
                 self.motor_msg.drive.steering_angle = 0
 
             # 장애물 검출 및 회피 각도 계산
-            calc_angle = self.obstacle_detector.process(
-                self.sensor.lidar_filtered, self.sensor.real_cam)
+            calc_angle = self.obstacle_detector.process(self.sensor.lidar_filtered)
             self.calc_angle = int(calc_angle)
 
             # 장애물 회피 상태에 들어갈 때 처리
