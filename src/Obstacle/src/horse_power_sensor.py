@@ -22,21 +22,12 @@ class HPSensor:
         # 카메라 이미지 구독 (OpenCV용)
         rospy.Subscriber("/camera0/usb_cam/image_raw", Image, self.callback_cam)
 
-        # 실제 영상 (real_cam) 변수 초기화
-        self.real_cam = None
-        # 동일한 이미지 토픽을 또 구독 (다른 목적, 예: 실제 처리용)
-        rospy.Subscriber("/camera0/usb_cam/image_raw", Image, self.callback_real_cam)
-
         # 필터링된 라이다 데이터 저장 변수
         self.lidar_filtered = None
         # 필터링된 라이다 데이터 구독
         rospy.Subscriber("scan_filtered", LaserScan, self.callback_lidar_filtered)
 
-    # 실제 카메라 콜백 함수
-    def callback_real_cam(self, msg):
-        # ROS 이미지 메시지를 OpenCV 형식으로 변환
-        self.real_cam = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-
+    
     # 일반 카메라 콜백 함수
     def callback_cam(self, msg):
         self.cam = self.bridge.imgmsg_to_cv2(msg, "bgr8")
@@ -53,11 +44,6 @@ class HPSensor:
         while self.cam is None:
             rate.sleep()
         rospy.loginfo("video ready")  # 준비 완료 로그 출력
-
-        # 실제 카메라 데이터가 수신될 때까지 대기
-        while self.real_cam is None:
-            rate.sleep()
-        rospy.loginfo("usb_cam ready")
 
         # 필터링된 라이다 데이터가 수신될 때까지 대기
         while self.lidar_filtered is None:
