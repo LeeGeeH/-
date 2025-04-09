@@ -150,10 +150,10 @@ class Clustering:
 
     # ========================================
     # 메인 처리 함수: LiDAR 데이터 처리 및 조향각 반환
-    # 입력: LiDAR 메시지 (msg), 이미지 (img, 사용되지 않음)
+    # 입력: LiDAR 메시지 (msg)
     # 출력: 조향각
     # ========================================
-    def process(self, msg, img):
+    def process(self, msg):
         # LiDAR 데이터를 좌표로 변환
         coordinate = self.coordinate_transform(msg)
         # 클러스터링 수행
