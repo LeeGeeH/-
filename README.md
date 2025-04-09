@@ -144,20 +144,11 @@ graph TD
 # Obstacle Package
 - Stopline.py:
     - 역할: 메인 노드로 시스템 실행을 담당
-    - 기능: HP를 호출하여 차량 제어 루프 실행, 아두이노 코드 업로드 기능 포함 (현재 주석 처리)
-    - 의존성: horse_power.py, stopline_detector.py, camera.py, cv2, numpy
+    - 기능: HP를 호출하여 차량 제어 루프 실행
+    - 의존성: horse_power.py, cv2
     - 
       ![image](https://github.com/user-attachments/assets/d0fd08d1-7969-4363-8656-de8b771cfc69)
 
-  
-- stopline_detector.py - StoplineDetector:
-    - 역할: 카메라 이미지에서 정지선 감지
-    - 기능: 윤곽선 분석으로 정지선 탐지, 감지 여부 반환
-    - 의존성: camera.py, cv2, numpy.
-    -
-    - ![image](https://github.com/user-attachments/assets/915c7112-c4fe-4dff-96ab-511b47f08ff8)
-
-  
 - Obstacle.ino:
     - 역할: ROS 메시지를 받아 모터 제어 및 가변저항 값 피드백
     - 기능: /ackermann_cmd 구독으로 속도/조향각 적용
