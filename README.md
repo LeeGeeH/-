@@ -67,15 +67,13 @@ graph TD
 ```mermaid
 graph TD
     subgraph "Obstacle Package"
-        Stopline[Stopline.py] -->|imports| StoplineDetector[stopline_detector.py]
-        Stopline -->|imports| HP[horse_power.py - HP]
-        Stopline -->|imports| Camera[camera.py - Camera]
-        StoplineDetector -->|processes| Camera
-        ObstacleINO[Obstacle.ino] -->|controls via /ackermann_cmd| HP
+        Main[main.py] -->|initializes| HP[horse_power.py - HP]
+        Main -->|imports| ROSPY[rospy]
+        ObstacleINO[Obstacle.ino] -->|subscribes /ackermann_cmd| HP
     end
 
     subgraph "Lane Detection"
-        LaneDetector[LaneDetector] -->|processes| Camera
+        LaneDetector[LaneDetector] -->|processes| Camera[camera.py - Camera]
     end
 
     subgraph "Obstacle Avoidance"
@@ -90,18 +88,15 @@ graph TD
     end
 
     subgraph "ROS Environment"
-        Launch[Launch File] -->|launches| Stopline
+        Launch[Launch File] -->|launches| Main
         Launch -->|includes| LoCamera[lo_camera.launch]
-        Stopline -->|initializes| ROSPY[rospy]
         HP -->|initializes| ROSPY
         Clustering -->|initializes| ROSPY
         HP -->|publishes /ackermann_cmd| Ackermann[AckermannDriveStamped]
         Clustering -->|publishes /ackermann_cmd| Ackermann
         ObstacleINO -->|subscribes /ackermann_cmd| Ackermann
-        ObstacleINO -->|publishes /uno| ROSPY
         HPSensor -->|subscribes /camera0/usb_cam/image_raw| Image[sensor_msgs.msg.Image]
         HPSensor -->|subscribes /scan_filtered| LaserScan[sensor_msgs.msg.LaserScan]
-        HPSensor -->|subscribes /ultrasonic| Int32MultiArray[std_msgs.msg.Int32MultiArray]
     end
 
     subgraph "External Modules"
@@ -115,17 +110,14 @@ graph TD
         CVBridge[cv_bridge.CvBridge]
         Image[sensor_msgs.msg.Image]
         LaserScan[sensor_msgs.msg.LaserScan]
-        Int32MultiArray[std_msgs.msg.Int32MultiArray]
     end
 
     subgraph "Arduino Environment"
         ObstacleINO -->|uses| CarLibrary[Car_Library.h]
     end
 
-    Stopline -->|uses| CV2
-    Stopline -->|uses| NP
-    StoplineDetector -->|uses| CV2
-    StoplineDetector -->|uses| NP
+    Main -->|uses| CV2
+    Main -->|uses| NP
     LaneDetector -->|uses| CV2
     LaneDetector -->|uses| NP
     Clustering -->|uses| NP
