@@ -56,8 +56,7 @@ graph TD
     J --> K
     K --> L[Obstacle.ino]
     L --> M[모터 제어<br>Obstacle.ino]
-    M --> N[uno 피드백<br>Obstacle.ino]
-    N --> O[사용자 종료<br>main.py]
+    M --> O[사용자 종료<br>main.py]
     O --> P[시스템 종료<br>main.py: cv2]
 
 ```
