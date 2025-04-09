@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <launch>
-
-    <!-- Upload Obstacle.ino to Arduino -->
-    <!--node pkg="Obstacle" type="Obstacle_uploader.py" name="Obstacle_uploader" output="screen"/-->
-   
-    <!-- Sensor -->
+    <!-- Camera Sensor -->
     <include file="$(find lo_camera)/launch/lo_camera.launch" />
 
-    <!-- Lane Bag File -->
-    <!-- node pkg="rosbag" type="play" name="rosbag" args="-l $(find main)/test.bag"/-->
-    
-    <!-- main -->
+    <!-- Main Node -->
     <node pkg="Obstacle" type="Stopline.py" name="main" output="screen"/>
 </launch>
-
-
