@@ -162,7 +162,8 @@ graph TD
     - 기능: Bird's Eye View 변환 후 차선 곡률 계산
     - 의존성: camera.py, cv2, numpy
     - 
-      ![image](https://github.com/user-attachments/assets/df6d46ad-8544-4d45-b90d-7269a380f066)
+      ![image](https://github.com/user-attachments/assets/b5b1910c-a060-422a-a770-3e666678d0b0)
+
 
   
 # Obstacle Avoidance
