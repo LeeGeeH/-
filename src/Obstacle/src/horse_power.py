@@ -15,8 +15,9 @@ from fsm import FiniteStateMachine # 상태전이 클래스
 class HP:
     def __init__(self):
         self.rate = rospy.Rate(10)  # 루프 주기 설정: 10Hz
-        self.motor_pub = rospy.Publisher('ackermann_cmd', AckermannDriveStamped, queue_size=20)  # 속도/조향 명령을 보낼 퍼블리셔
         self.motor_msg = AckermannDriveStamped()  # 보낼 메시지 객체 초기화
+        self.motor_pub = rospy.Publisher('ackermann_cmd', AckermannDriveStamped, queue_size=20)  # 속도/조향 명령을 보낼 퍼블리셔
+        
         self.sensor = HPSensor()  # 센서 객체 생성
         self.sensor.init(self.rate)  # 센서 초기화 (카메라, 라이다 등)
        
