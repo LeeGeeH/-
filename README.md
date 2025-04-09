@@ -43,9 +43,9 @@
 
 ```mermaid
 graph TD
-    A[사용자 명령<br>main.py] --> B[ROS 초기화<br>main.py: rospy]
+    A[사용자 명령<br>Stopline.py] --> B[ROS 초기화<br>Stopline.py: rospy]
     B --> C[센서 데이터 수집<br>horse_power_sensor.py: HPSensor]
-    C --> D[HP.control 호출<br>main.py-> horse_power.py: HP]
+    C --> D[HP.control 호출<br>Stopline.py-> horse_power.py: HP]
     D --> E[장애물 확인<br>horse_power.py: HP, Clustering]
     E -->|장애물 없음| F[차선 주행<br>horse_power.py: HP]
     E -->|장애물 있음| G[장애물 회피<br>horse_power.py: HP, FSM.py: FiniteStateMachine]
@@ -56,8 +56,8 @@ graph TD
     J --> K
     K --> L[Obstacle.ino]
     L --> M[모터 제어<br>Obstacle.ino]
-    M --> O[사용자 종료<br>main.py]
-    O --> P[시스템 종료<br>main.py: cv2]
+    M --> O[사용자 종료<br>Stopline.py]
+    O --> P[시스템 종료<br>Stopline.py: cv2]
 
 ```
 ---
@@ -67,13 +67,14 @@ graph TD
 ```mermaid
 graph TD
     subgraph "Obstacle Package"
-        Main[main.py] -->|initializes| HP[horse_power.py - HP]
-        Main -->|imports| ROSPY[rospy]
+        Stopline[Stopline.py] -->|initializes| HP[horse_power.py - HP]
+        Stopline -->|imports| Camera[camera.py - Camera]
+        Stopline -->|imports| StoplineDetector[stopline_detector.py]
         ObstacleINO[Obstacle.ino] -->|subscribes /ackermann_cmd| HP
     end
 
     subgraph "Lane Detection"
-        LaneDetector[LaneDetector] -->|processes| Camera[camera.py - Camera]
+        LaneDetector[LaneDetector] -->|processes| Camera
     end
 
     subgraph "Obstacle Avoidance"
@@ -88,15 +89,16 @@ graph TD
     end
 
     subgraph "ROS Environment"
-        Launch[Launch File] -->|launches| Main
+        Launch[Launch File] -->|launches| Stopline
         Launch -->|includes| LoCamera[lo_camera.launch]
+        Stopline -->|initializes| ROSPY[rospy]
         HP -->|initializes| ROSPY
         Clustering -->|initializes| ROSPY
         HP -->|publishes /ackermann_cmd| Ackermann[AckermannDriveStamped]
         Clustering -->|publishes /ackermann_cmd| Ackermann
         ObstacleINO -->|subscribes /ackermann_cmd| Ackermann
         HPSensor -->|subscribes /camera0/usb_cam/image_raw| Image[sensor_msgs.msg.Image]
-        HPSensor -->|subscribes /scan_filtered| LaserScan[sensor_msgs.msg.LaserScan]
+        HPSensor -->|sub BOTHscribes /scan_filtered| LaserScan[sensor_msgs.msg.LaserScan]
     end
 
     subgraph "External Modules"
@@ -110,14 +112,16 @@ graph TD
         CVBridge[cv_bridge.CvBridge]
         Image[sensor_msgs.msg.Image]
         LaserScan[sensor_msgs.msg.LaserScan]
+        SUBPROCESS[subprocess]
     end
 
     subgraph "Arduino Environment"
         ObstacleINO -->|uses| CarLibrary[Car_Library.h]
     end
 
-    Main -->|uses| CV2
-    Main -->|uses| NP
+    Stopline -->|uses| CV2
+    Stopline -->|uses| NP
+    Stopline -->|uses| SUBPROCESS
     LaneDetector -->|uses| CV2
     LaneDetector -->|uses| NP
     Clustering -->|uses| NP
@@ -131,6 +135,8 @@ graph TD
     HPSensor -->|uses| NP
     Stanley -->|uses| MATH
     Stanley -->|uses| NP
+    StoplineDetector -->|uses| CV2
+    StoplineDetector -->|uses| NP
 
 ```
 
