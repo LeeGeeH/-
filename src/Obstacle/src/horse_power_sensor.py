@@ -14,10 +14,6 @@ from std_msgs.msg import Int32MultiArray
 
 class HPSensor:
     def __init__(self):
-        # 초음파 센서 데이터 초기값 (리스트 형태)
-        self.ultra = [0]
-        # 초음파 센서 데이터 구독
-        rospy.Subscriber("ultrasonic", Int32MultiArray, self.callback_ultra, queue_size=1)
 
         # 영상 데이터 초기화
         self.cam = None
@@ -51,11 +47,6 @@ class HPSensor:
         # 예전 코드에서 라이다 길이를 출력하려고 했던 흔적 주석
         # print('rm', len(LaserScan.ranges))
 
-    # 초음파 센서 콜백 함수
-    def callback_ultra(self, msg):
-        self.ultra = msg.data  # 수신된 데이터를 리스트로 저장
-        print(list(self.ultra))  # 초음파 센서 값 출력
-
     # 센서가 모두 초기화될 때까지 기다리는 함수
     def init(self, rate):
         # 카메라 데이터가 수신될 때까지 대기
@@ -72,8 +63,3 @@ class HPSensor:
         while self.lidar_filtered is None:
             rate.sleep()
         rospy.loginfo("filtered lidar ready")
-
-        # 초음파 데이터가 수신될 때까지 대기
-        while self.ultra is None:
-            rate.sleep()
-        rospy.loginfo("ultra ready")
