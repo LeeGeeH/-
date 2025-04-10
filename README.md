@@ -154,7 +154,8 @@ graph TD
     - 기능: /ackermann_cmd 구독으로 속도/조향각 적용
     - 의존성: Car_Library.h
     - 
-      ![image](https://github.com/user-attachments/assets/02c2830b-9a58-4909-b1a1-1ddc2d898842)
+      ![image](https://github.com/user-attachments/assets/b5750ffe-2498-4bae-9f81-5ac20db5fbc7)
+
 
 # Lane Detection
 - LaneDetector:
