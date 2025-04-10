@@ -9,8 +9,6 @@ import numpy as np
 from cv_bridge import CvBridge
 # ROS에서 사용하는 센서 메시지 타입들
 from sensor_msgs.msg import Image, LaserScan
-# 초음파 센서 데이터를 담는 메시지 타입 (정수 배열)
-from std_msgs.msg import Int32MultiArray
 
 class HPSensor:
     def __init__(self):
