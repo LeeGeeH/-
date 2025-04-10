@@ -154,9 +154,9 @@ class LaneDetector:
 
     # 전체 처리: 이미지 입력부터 조향각 출력
     def process(self, origin_img):
-        origin_img = cv2.resize(origin_img, (640, 480), cv2.INTER_LINEAR)  # 크기 조정
-        img = self.camera.pre_processing(origin_img)  # 이진화 처리
-        sliding_img, left_fitx, right_fitx, left_lane_detected, right_lane_detected = self.sliding_window(img, draw_windows=True)
-        path_x, path_y = self.draw_path(sliding_img, left_fitx, right_fitx, draw_windows=True)
+        origin_img = cv2.resize(origin_img, (640, 480), cv2.INTER_LINEAR)
+        img = self.camera.pre_processing(origin_img)
+        out_img, left_fitx, right_fitx, left_lane_detected, right_lane_detected = self.sliding_window(img, draw_windows=True)
+        path_x, path_y = self.draw_path(out_img, left_fitx, right_fitx, draw_windows=True)
         curvature_angle_new = self.get_angle(path_x, path_y, left_lane_detected, right_lane_detected)
         return curvature_angle_new
