@@ -210,18 +210,17 @@ class LaneDetector:
         # 차선 모두 인식 실패: 이전 조향각의 2배 반환
         if not left_lane_detected and not right_lane_detected:
             # - 2배로 반환: 차선이 없으면 더 강하게 반응하도록 설계
-            return self.steering_memory * 2
+            return self.steering_memory 
         # 경로를 2D 배열로 결합: x, y 좌표 쌍으로 변환
         # - reshape(-1, 1): (480,) → (480, 1)
         # - axis=1: 열 방향으로 결합 → (480, 2)
         path = np.concatenate((path_x.reshape(-1, 1), path_y.reshape(-1, 1)), axis=1)
-        # 이미지 하단에서 차량과 경로의 차이 계산: 중앙(320) 기준
-        # - path[0, 0]: 경로의 맨 아래 x 좌표 (y=0일 때)
-        base_diff = 320 - path[0, 0]
+
         # 경로 방향 계산: 1차 방정식 기울기를 구하고 1000배로 확대
         # - np.polyfit(y, x, 1): y에 대한 x의 기울기와 절편 반환
         # - [0]: 기울기만 추출, 1000배로 확대해 민감도 증가
         direction = np.polyfit(path[:, 1], path[:, 0], 1)[0] * 1000
+        
         # 방향 보정: 음수/양수에 따라 반전 및 크기 조정
         # - 양수면 오른쪽 기울기 → 왼쪽 조향(-), 음수면 반대
         # - 0.4: 조향각 크기를 줄이는 스케일링 상수
