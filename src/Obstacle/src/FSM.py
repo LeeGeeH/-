@@ -7,8 +7,6 @@ class FiniteStateMachine:
     def __init__(self):
         self.current_state = "FollowLane"
         self.obstacle_count = 1
-        #self.det_count = 0
-        
 
     def transition(self, detected_obstacle):
 
