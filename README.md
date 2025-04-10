@@ -158,12 +158,20 @@ graph TD
 
 
 # Lane Detection
+- camera.py:
+    - 역할: 도로 검출을 위한 전처리 파이프라인을 구성
+    - 기능: 노이즈 제거, 모폴로지 연산, 그레이스케일 변환, 블러링, 엣지 검출, 원근 변환, 반사광 제거
+    - 의존성: numpy, cv2
+    -
+      ![image](https://github.com/user-attachments/assets/ab8b8527-3d58-404c-be9e-e4933727fcd7)
+
 - LaneDetector:
     - 역할: 카메라 이미지에서 차선 감지 및 조향각 계산
     - 기능: Bird's Eye View 변환 후 차선 곡률 계산
     - 의존성: camera.py, cv2, numpy
     - 
-      ![image](https://github.com/user-attachments/assets/b5b1910c-a060-422a-a770-3e666678d0b0)
+      ![image](https://github.com/user-attachments/assets/d73961df-2957-47a8-b9d6-a837569d1ac4)
+
 
 
   
@@ -193,7 +201,8 @@ graph TD
     - 의존성: LaneDetector, Clustering, horse_power_sensor.py, controller.py, cv2, time
     - ROS: /ackermann_cmd 퍼블리시
     - 
-      ![image](https://github.com/user-attachments/assets/111a0472-1cc4-4e4f-b24a-5fef98f64228)
+      ![image](https://github.com/user-attachments/assets/7dcdf1ec-27cf-4ae1-82c1-6187f563c2d4)
+
   
 - horse_power_sensor.py - HPSensor:
     - 역할: 센서 데이터 수집 (카메라, LiDAR)
@@ -201,14 +210,16 @@ graph TD
     - 의존성: cv_bridge, numpy
     - ROS: /camera0/usb_cam/image_raw, /scan_filtered 구독
     - 
-      ![image](https://github.com/user-attachments/assets/5a29f868-918c-433a-b42d-2cba861d0c14)
+      ![image](https://github.com/user-attachments/assets/65ff0fe2-c9d0-49d6-8055-b8d859efda52)
+
 
 - controller.py - Stanley:
     - 역할: Stanley 제어 알고리즘으로 조향각 계산
     - 기능: 곡률 기반 조향각 반환
     - 의존성: math, numpy
     - 
-      ![image](https://github.com/user-attachments/assets/63b09254-897d-4ac6-a66c-a0e312bb6534)
+      ![image](https://github.com/user-attachments/assets/c4b7ae4e-6c3c-421b-a3ef-d65ad62b71f7)
+
 
   
 # ROS Environment
