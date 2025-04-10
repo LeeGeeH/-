@@ -44,11 +44,8 @@ class Clustering:
 
         # 제어 관련 변수 초기화 ###########################################
         self.steering_angle = 0  # 조향각 초기값
-        self.count = 0  # 카운터 (미션 상태 추적용 추정)
-        self.wait_flag = 0  # 대기 플래그 (미션 대기용 추정)
         self.BOTH, self.LEFT, self.RIGHT = 0, 1, 2  # ROI 설정 상수
         self.roi_setting = self.BOTH  # 기본 ROI: 양쪽 탐지
-        self.mission_finished = False  # 미션 완료 여부 플래그
         ###################################################################
 
     # ========================================
