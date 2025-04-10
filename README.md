@@ -150,7 +150,7 @@ graph TD
       ![image](https://github.com/user-attachments/assets/d0fd08d1-7969-4363-8656-de8b771cfc69)
 
 - Obstacle.ino:
-    - 역할: ROS 메시지를 받아 모터 제어 및 가변저항 값 피드백
+    - 역할: ROS 메시지를 받아 모터 제어
     - 기능: /ackermann_cmd 구독으로 속도/조향각 적용
     - 의존성: Car_Library.h
     - 
