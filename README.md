@@ -206,7 +206,7 @@ graph TD
   
 - horse_power_sensor.py - HPSensor:
     - 역할: 센서 데이터 수집 (카메라, LiDAR)
-    - 기능: ROS 토픽 구독으로 데이터 저장 (real_cam, cam, lidar_filtered)
+    - 기능: ROS 토픽 구독으로 데이터 저장 (cam, lidar_filtered)
     - 의존성: cv_bridge, numpy
     - ROS: /camera0/usb_cam/image_raw, /scan_filtered 구독
     - 
