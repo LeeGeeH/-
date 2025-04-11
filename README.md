@@ -194,10 +194,10 @@ graph TD
 - horse_power.py - HP:
     - 역할: 차량 제어 통합 (차선 주행 + 장애물 회피).
     - 기능:
-        - LaneDetector로 차선 추적
         - Clustering으로 장애물 회피
-        - Stanley로 조향각 보정
         - 시간 기반 회피 시퀀스 실행
+        - LaneDetector로 차선 추적
+        - Stanley로 조향각 보정
     - 의존성: LaneDetector, Clustering, horse_power_sensor.py, controller.py, cv2, time
     - ROS: /ackermann_cmd 퍼블리시
     - 
